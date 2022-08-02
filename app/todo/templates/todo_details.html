@@ -1,0 +1,23 @@
+{%  extends 'base.html' %}
+{%  block title_name %}Details{% endblock title_name%}
+{%  block main_content %}
+<table>
+<tr>
+    <th colspan="5">To Do List</th>
+</tr>
+<tr>
+    <th>Id</th>
+    <th>subject</th>
+    <th>date_todo</th>
+    <th>when</th>
+    <th>status</th>
+</tr>
+<tr>
+    <td>{{ todo.id }}</td>
+    <td>{{ todo.subject }}</td>
+    <td>{{ todo.date_todo }}</td>
+    <td>{{ todo.when }}</td>
+    <td>{{ todo.status }}</td>
+</tr>
+</table>
+{% endblock main_content %}

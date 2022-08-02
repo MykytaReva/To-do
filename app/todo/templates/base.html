@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title_name %} {% endblock %}</title>
+    <style>
+         table, th, td {
+            border: 1px solid black;
+         }
+    </style>
+</head>
+<body>
+{% include 'parts/navbar.html' %}
+{% block main_content %} {% endblock main_content %}
+</body>
+</html>
