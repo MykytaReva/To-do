@@ -5,17 +5,18 @@
 
 <table>
 <tr>
-    <th colspan="6"><a href="/create/">Create new Task</a></th>
+    <th colspan="7"><a href="{% url 'todo:todo_create' %}">Create new Task</a></th>
 </tr>
 <tr>
-    <th colspan="2"><a href="/list/active/">View active</a></th>
-    <th colspan="2"><a href="/list/completed/">View completed</a></th>
-    <th colspan="2"><a href="/list/">View all</a></th>
+    <th colspan="2"><a href="{% url 'todo:todo_list_active' %}">View active</a></th>
+    <th colspan="2"><a href="{% url 'todo:todo_list_completed' %}">View completed</a></th>
+    <th colspan="3"><a href="{% url 'todo:todo_list' %}">View all</a></th>
 </tr>
 <tr>
     <th>Id</th>
     <th>Task</th>
     <th>Deadline</th>
+    <th>Status</th>
     <th colspan="3">Actions</th>
 </tr>
 {% for do in todo_list %}
@@ -23,9 +24,10 @@
         <td>{{ do.id }}</td>
         <td>{{ do.subject }}</td>
         <td>{{ do.date_todo }}</td>
-        <td><a href="/details/{{ do.id }}/">View</a></td>
-        <td><a href="/update/{{ do.id }}/">Update</a></td>
-        <td><a href="/delete/{{ do.id }}/">Delete</a></td>
+        <td>{{ do.status }}</td>
+        <td><a href="{% url 'todo:todo_details' pk=do.id %}">View</a></td>
+        <td><a href="{% url 'todo:todo_update' pk=do.id %}">Update</a></td>
+        <td><a href="{% url 'todo:todo_delete' pk=do.id %}">Delete</a></td>
     </tr>
 {% endfor %}
 
