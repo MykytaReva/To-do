@@ -3,7 +3,7 @@ from todo.models import ToDo
 from django.views import generic
 from todo.forms import ToDoForm, SignUpForm
 from django.shortcuts import render, redirect
-
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.views import LoginView, PasswordChangeView
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.models import User
@@ -43,24 +43,52 @@ class IndexView(generic.TemplateView):
     template_name = 'index.html'
 
 
-class TodoListView(generic.ListView):
+
+
+class TodoListView(LoginRequiredMixin, generic.ListView):
+
     queryset = ToDo.objects.all()
     template_name = 'todo_list.html'
 
+    def get_queryset(self):
+        super().get_queryset()
+        admin_uid = self.request.user
+        if not admin_uid.is_superuser:
+            return ToDo.objects.filter(user=admin_uid)
+        return ToDo.objects.all()
+
+
+
 class TodoActiveListView(generic.ListView):
-    queryset = ToDo.objects.all().filter(status='Active')
+    # queryset = ToDo.objects.all().filter(status='Active')
     template_name = 'todo_list.html'
+
+    def get_queryset(self):
+        admin_uid = self.request.user
+        if admin_uid.is_superuser:
+            return ToDo.objects.filter(status='Active')
+        return ToDo.objects.filter(user=admin_uid, status='Active')
 
 class TodoCompletedListView(generic.ListView):
-    queryset = ToDo.objects.all().filter(status='Completed')
+    # queryset = ToDo.objects.all().filter(status='Completed')
     template_name = 'todo_list.html'
 
+    def get_queryset(self):
+        admin_uid = self.request.user
+        if admin_uid.is_superuser:
+            return ToDo.objects.filter(status='Completed')
+        return ToDo.objects.filter(user=admin_uid, status='Completed')
 
 class TodoCreateView(generic.CreateView):
     queryset = ToDo.objects.all()
     template_name = 'todo_create.html'
     form_class = ToDoForm
     success_url = reverse_lazy('todo:todo_list')
+
+    def form_valid(self, form):
+        instance = form.save(commit=False)
+        instance.user = self.request.user
+        return super().form_valid(form)
 
 class TodoUpdateView(generic.UpdateView):
     queryset = ToDo.objects.all()
@@ -72,6 +100,9 @@ class ToDoDeleteView(generic.DeleteView):
     queryset = ToDo.objects.all()
     template_name = 'todo_delete.html'
     success_url = reverse_lazy('todo:todo_list')
+
+    # def test_func(self):
+    #     return self.request.user.is_superuser
 
 class ToDoDetailView(generic.DetailView):
     queryset = ToDo.objects.all()

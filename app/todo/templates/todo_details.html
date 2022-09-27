@@ -3,7 +3,10 @@
 {%  block main_content %}
 <table>
 <tr>
-    <th colspan="5">To Do List</th>
+    <th colspan="6">To Do List</th>
+</tr>
+<tr>
+    <th colspan="6">{{ request.user.email }}</th>
 </tr>
 <tr>
     <th>Id</th>
@@ -11,6 +14,7 @@
     <th>Deadline</th>
     <th>Start</th>
     <th>Status</th>
+    <th>User</th>
 </tr>
 <tr>
     <td>{{ todo.id }}</td>
@@ -18,6 +22,7 @@
     <td>{{ todo.date_todo }}</td>
     <td>{{ todo.when }}</td>
     <td>{{ todo.status }}</td>
+    <td>{{ todo.user.first_name }}</td>
 </tr>
 </table>
 {% endblock main_content %}
